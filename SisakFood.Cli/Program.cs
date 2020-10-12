@@ -3,33 +3,54 @@ using System.Collections.Generic;
 using SisakFood.Data.Dao;
 using SisakFood.Data.Models;
 using SisakCla.Core;
+using System.Linq;
 
 namespace SisakFood.Cli
 {
     class Program
     {
+        const string VERSION = "1.0.0";
+
         static void Main(string[] args)
         {
+            var program = new Program();
+
             SisakCla.Core.Cli cli = new SisakCla.Core.Cli(args);
-            cli.Description = "Hauptprogramm super dupa";
-            cli.Version = "1.0";
-            cli.Copyright = "(c) Stefan Isak, 2020";
-            cli.PrintDefaultValue = false;
-            cli.PrintParameters = false;
-            cli.AddFunctionClass(new Program());
-            cli.Parse();
+            cli.AddFunctionClass(program);
+            cli.Description = "SisakFood.Cli";
+            cli.Version = Program.VERSION;
+            cli.Copyright = "(c) Sisak, 2020";
+
+            try
+            {
+                cli.Parse();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                cli.PrintHelp();
+            }
         }
 
-        [CliOption("-t", Description = "Testausgabe")]
-        public void test(string eingabeParameter, int testParameter) 
+        [CliOption("add", Description = "Adds new food or meals")]
+        public void Add(string[] args)
         {
-            Console.WriteLine("Hello");
+            CliAdd add = new CliAdd(args ?? new string[] {});
+            add.Parse();
         }
 
-        [CliOption("-a", LongOption = "--alpha", Description = "Test aaaaa")]
-        public void test2(string eingabeParameter, int testParameter=3) 
+        [CliOption("remove", Description = "Remove food or meals")]
+        public void Remove(string[] args)
         {
-            Console.WriteLine("hello2");
+            CliRemove remove = new CliRemove(args ?? new string[] {});
+            remove.Parse();
+        }
+
+        [CliOption("list", Description = "List food or meals")]
+        public void List(string[] args)
+        {
+            CliList list = new CliList(args ?? new string[] {});
+            list.Parse();
         }
     }
 }

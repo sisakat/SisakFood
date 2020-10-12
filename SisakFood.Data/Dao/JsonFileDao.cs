@@ -40,6 +40,7 @@ namespace SisakFood.Data.Dao
         }
 
         private async Task WriteJson<T>(string fileName, T value) {
+            File.Delete(fileName);
             using (Stream stream = new FileStream(fileName, FileMode.OpenOrCreate)) 
             {
                 await JsonSerializer.SerializeAsync(stream, value,
