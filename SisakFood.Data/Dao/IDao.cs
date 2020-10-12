@@ -7,14 +7,15 @@ namespace SisakFood.Data.Dao
 {
     public interface IDao
     {
-        Task<IEnumerable<DailyMeals>> GetDailyMeals(DateTime from);
-        Task InsertDailyMeals(DailyMeals dailyMeals);
-        Task UpdateDailyMeals(DailyMeals dailyMeals);
-        Task DeleteDailyMeals(DailyMeals dailyMeals);
-        Task<IEnumerable<Food>> GetFoods();
-        Task InsertFoods(IEnumerable<Food> foods);
-        Task InsertFood(Food food);
-        Task UpdateFood(Food food);
-        Task DeleteFood(Food food);
+        DailyMeals GetDailyMeals(DateTime from);
+        void InsertDailyMeals(DailyMeals dailyMeals);
+        void UpdateDailyMeals(DailyMeals dailyMeals);
+        void DeleteDailyMeals(DailyMeals dailyMeals);
+        IEnumerable<Food> GetFoods();
+        Food GetFood(string name);
+        void InsertFoods(IEnumerable<Food> foods);
+        void InsertFood(Food food);
+        void UpdateFood(Food food);
+        void DeleteFood(Food food);
     }
 }

@@ -4,6 +4,7 @@ using SisakFood.Data.Models;
 using System.IO;
 using System.Threading.Tasks;
 using System.Text.Json;
+using System.Linq;
 
 namespace SisakFood.Data.Dao
 {
@@ -31,70 +32,77 @@ namespace SisakFood.Data.Dao
             return Path.Combine(_mealFolder, $"{_dateTimeConverter(from)}{JSON_FILE_EXTENSION}");
         }
 
-        private async Task<T> ReadJson<T>(string fileName) 
+        private T ReadJson<T>(string fileName) 
         {
-            using (Stream stream = new FileStream(fileName, FileMode.Open))
-            {
-                return await JsonSerializer.DeserializeAsync<T>(stream);
-            }
+            string json = File.ReadAllText(fileName);
+            return JsonSerializer.Deserialize<T>(json);
         }
 
-        private async Task WriteJson<T>(string fileName, T value) {
-            File.Delete(fileName);
-            using (Stream stream = new FileStream(fileName, FileMode.OpenOrCreate)) 
-            {
-                await JsonSerializer.SerializeAsync(stream, value,
-                    new JsonSerializerOptions() {
-                        WriteIndented = true
-                    });
-            }
+        private void WriteJson<T>(string fileName, T value) {
+            if (File.Exists(fileName)) File.Delete(fileName);
+            string json = JsonSerializer.Serialize(value, new JsonSerializerOptions() {
+                WriteIndented = true
+            });
+            File.WriteAllText(fileName, json);
         }
 
-        public async Task<IEnumerable<DailyMeals>> GetDailyMeals(DateTime from)
+        public DailyMeals GetDailyMeals(DateTime from)
         {
             string fileName = GetJsonFileName(from);
-            return await ReadJson<IEnumerable<DailyMeals>>(fileName);
+            if (File.Exists(fileName))
+                return ReadJson<DailyMeals>(fileName);
+            else
+                return new DailyMeals();
         }
 
-        public async Task InsertDailyMeals(DailyMeals dailyMeals)
+        public void InsertDailyMeals(DailyMeals dailyMeals)
         {
             string fileName = GetJsonFileName(dailyMeals.Day);
-            await WriteJson(fileName, dailyMeals);
+            WriteJson(fileName, dailyMeals);
         }
 
-        public async Task UpdateDailyMeals(DailyMeals dailyMeals)
+        public void UpdateDailyMeals(DailyMeals dailyMeals)
         {
-            await Task.FromException(new NotImplementedException("Update not defined for JSON dao"));
+            throw new NotImplementedException("Update not defined for JSON dao");
         }
 
-        public Task DeleteDailyMeals(DailyMeals dailyMeals)
+        public void DeleteDailyMeals(DailyMeals dailyMeals)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Food>> GetFoods()
+        public IEnumerable<Food> GetFoods()
         {
             string fileName = $"{FOODS_FILE_NAME}{JSON_FILE_EXTENSION}";
-            return await ReadJson<IEnumerable<Food>>(fileName);
+            if (File.Exists(fileName))
+                return ReadJson<IEnumerable<Food>>(fileName);
+            else
+                return Enumerable.Empty<Food>();
         }
 
-        public async Task InsertFoods(IEnumerable<Food> foods)
+        public Food GetFood(string name) 
+        {
+            var foods = GetFoods();
+            return foods.FirstOrDefault(x => x.Name == name);
+        }
+
+        public void InsertFoods(IEnumerable<Food> foods)
         {
             string fileName = $"{FOODS_FILE_NAME}{JSON_FILE_EXTENSION}";
-            await WriteJson(fileName, foods);
+            WriteJson(fileName, foods);
         }
 
-        public Task InsertFood(Food food)
+        public void InsertFood(Food food)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateFood(Food food)
+        public void UpdateFood(Food food)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteFood(Food food)
+        public void DeleteFood(Food food)
         {
             throw new NotImplementedException();
         }

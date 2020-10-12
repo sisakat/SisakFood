@@ -12,11 +12,12 @@ namespace SisakFood.Cli
             cli.AddFunctionClass(this);
         }
 
-        [CliOption("food", Description = "List all food")]
+        [CliOption("food", LongOption = "foods", Description = "List all food")]
         public void ListFood(string pattern = "")
         {
-            var foods = dao.GetFoods().Result;
+            var foods = dao.GetFoods();
             PrintFoodHeader();
+            PrintLine();
             foreach (var food in foods) 
             {
                 if (string.IsNullOrEmpty(pattern) || food.Name.Contains(pattern))
@@ -24,6 +25,34 @@ namespace SisakFood.Cli
                     PrintFood(food);
                 }
             }
+        }
+
+        [CliOption("meal", LongOption = "meals", Description = "List all meals")]
+        public void ListFood(DateTime day)
+        {
+            var meals = dao.GetDailyMeals(day);
+            PrintFoodHeader();
+            PrintLine();
+            foreach (var meal in meals.Meals) 
+            {
+                PrintMeal(meal);
+            }
+
+            PrintLine();
+            var str = String.Format("{0,-20} {1,10} kcal {2,10} g {3,10} g {4,10} g {5,10} g",
+                "Total",
+                meals.CalculateKiloCalories(),
+                meals.CalculateCarbohydrates(),
+                meals.CalculateFat(),
+                meals.CalculateProtein(),
+                meals.CalculateAlcohol());
+            Console.WriteLine(str);
+        }
+
+        public void PrintLine()
+        {
+            Console.WriteLine("------------------------------------------"
+                + "----------------------------------------------");
         }
 
         public void PrintFoodHeader()
@@ -47,6 +76,18 @@ namespace SisakFood.Cli
                 food.Nutrients.Fat,
                 food.Nutrients.Protein,
                 food.Nutrients.Alcohol);
+            Console.WriteLine(str);
+        }
+
+        public void PrintMeal(Meal meal) 
+        {
+            var str = String.Format("{0,-20} {1,10} kcal {2,10} g {3,10} g {4,10} g {5,10} g",
+                meal.Food.Name,
+                meal.CalculateKiloCalories(),
+                meal.CalculateCarbohydrates(),
+                meal.CalculateFat(),
+                meal.CalculateProtein(),
+                meal.CalculateAlcohol());
             Console.WriteLine(str);
         }
     }

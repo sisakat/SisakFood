@@ -22,7 +22,7 @@ namespace SisakFood.Cli
                 return;
             }
 
-            var foods = (dao.GetFoods().Result).ToList();
+            var foods = (dao.GetFoods()).ToList();
             int removed = foods.RemoveAll(x => x.Name == name);
             Console.WriteLine($"{removed} foods removed");
             dao.InsertFoods(foods);
