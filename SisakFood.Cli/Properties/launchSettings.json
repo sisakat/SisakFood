@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SisakFood.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "\"hello this is a test\" test"
+    }
+  }
+}
