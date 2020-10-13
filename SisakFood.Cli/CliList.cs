@@ -6,7 +6,7 @@ namespace SisakFood.Cli
 {
     public class CliList : CliCommand
     {
-        public CliList(string[] args) : base(args)
+        public CliList(string[] args, string folder) : base(args, folder)
         {
             cli.Description = "List foods and meals";
             cli.AddFunctionClass(this);
@@ -28,9 +28,16 @@ namespace SisakFood.Cli
         }
 
         [CliOption("meal", LongOption = "meals", Description = "List all meals")]
-        public void ListFood(DateTime day)
+        public void ListMeals(string date)
         {
-            var meals = dao.GetDailyMeals(day);
+            DateTime dateTime;
+            if (!DateTime.TryParse(date, out dateTime)) 
+            {
+                Console.WriteLine("Specified date could not be parsed. Using the current day instead.");
+                dateTime = DateTime.Now;
+            }
+
+            var meals = dao.GetDailyMeals(dateTime);
             PrintFoodHeader();
             PrintLine();
             foreach (var meal in meals.Meals) 

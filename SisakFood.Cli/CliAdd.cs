@@ -9,7 +9,7 @@ namespace SisakFood.Cli
 {
     public class CliAdd : CliCommand
     {
-        public CliAdd(string[] args) : base(args)
+        public CliAdd(string[] args, string folder) : base(args, folder)
         {
             cli.Description = "Add foods and daily meals";
             cli.AddFunctionClass(this);

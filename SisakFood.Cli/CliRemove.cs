@@ -7,7 +7,7 @@ namespace SisakFood.Cli
 {
     public class CliRemove : CliCommand
     {
-        public CliRemove(string[] args) : base(args)
+        public CliRemove(string[] args, string folder) : base(args, folder)
         {
             cli.Description = "Remove foods and daily meals";
             cli.AddFunctionClass(this);

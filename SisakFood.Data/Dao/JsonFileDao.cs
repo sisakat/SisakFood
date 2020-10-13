@@ -13,12 +13,12 @@ namespace SisakFood.Data.Dao
         const string JSON_FILE_EXTENSION = ".json";
         const string FOODS_FILE_NAME = "foods";
         public delegate string DateTimeConverter(DateTime dateTime);
-        private string _mealFolder;
+        private string _mainFolder;
         private DateTimeConverter _dateTimeConverter;
 
-        public JsonFileDao(string mealFolder)
+        public JsonFileDao(string mainFolder)
         {
-            _mealFolder = mealFolder;
+            _mainFolder = mainFolder;
             _dateTimeConverter = dt => dt.ToString("yyyy_MM_dd");
         }
 
@@ -29,7 +29,7 @@ namespace SisakFood.Data.Dao
 
         private string GetJsonFileName(DateTime from) 
         {
-            return Path.Combine(_mealFolder, $"{_dateTimeConverter(from)}{JSON_FILE_EXTENSION}");
+            return Path.Combine(_mainFolder, $"{_dateTimeConverter(from)}{JSON_FILE_EXTENSION}");
         }
 
         private T ReadJson<T>(string fileName) 
@@ -71,9 +71,14 @@ namespace SisakFood.Data.Dao
             throw new NotImplementedException();
         }
 
+        public string GetFoodsFolder()
+        {
+            return Path.Combine(_mainFolder, $"{FOODS_FILE_NAME}{JSON_FILE_EXTENSION}");
+        }
+
         public IEnumerable<Food> GetFoods()
         {
-            string fileName = $"{FOODS_FILE_NAME}{JSON_FILE_EXTENSION}";
+            string fileName = GetFoodsFolder();
             if (File.Exists(fileName))
                 return ReadJson<IEnumerable<Food>>(fileName);
             else
@@ -88,7 +93,7 @@ namespace SisakFood.Data.Dao
 
         public void InsertFoods(IEnumerable<Food> foods)
         {
-            string fileName = $"{FOODS_FILE_NAME}{JSON_FILE_EXTENSION}";
+            string fileName = GetFoodsFolder();
             WriteJson(fileName, foods);
         }
 

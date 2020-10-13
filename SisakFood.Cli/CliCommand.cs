@@ -7,9 +7,9 @@ namespace SisakFood.Cli
         protected readonly SisakCla.Core.Cli cli;
         protected readonly IDao dao;
 
-        public CliCommand(string[] args) 
+        public CliCommand(string[] args, string folder) 
         {
-            dao = new JsonFileDao(".");
+            dao = new JsonFileDao(folder);
             cli = new SisakCla.Core.Cli(args);
         }
 
