@@ -52,7 +52,7 @@ namespace SisakFood.Data.Dao
             if (File.Exists(fileName))
                 return ReadJson<DailyMeals>(fileName);
             else
-                return new DailyMeals();
+                return new DailyMeals() { Day = from };
         }
 
         public void InsertDailyMeals(DailyMeals dailyMeals)

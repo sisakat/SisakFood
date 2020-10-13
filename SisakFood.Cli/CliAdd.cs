@@ -16,8 +16,15 @@ namespace SisakFood.Cli
         }
 
         [CliOption("meal", Description = "Create new meal")]
-        public void AddMeal(string name, int quantity = 1)
+        public void AddMeal(string name, int quantity = 1, string date = null)
         {
+            DateTime dateTime = DateTime.Now;
+            if (date != null && !DateTime.TryParse(date, out dateTime)) 
+            {
+                Console.WriteLine("Specified date could not be parsed. Using the current day instead.");
+                dateTime = DateTime.Now;
+            }
+
             if (String.IsNullOrEmpty(name))
             {
                 Console.WriteLine("Please provide a food name and quantity.");
@@ -36,7 +43,7 @@ namespace SisakFood.Cli
             m.Food = food;
             m.Quantity = quantity;
 
-            var dailyMeals = dao.GetDailyMeals(DateTime.Now);
+            var dailyMeals = dao.GetDailyMeals(dateTime);
             dailyMeals.Meals.Add(m);
 
             dao.InsertDailyMeals(dailyMeals);
