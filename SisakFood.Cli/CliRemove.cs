@@ -13,7 +13,7 @@ namespace SisakFood.Cli
             cli.AddFunctionClass(this);
         }
 
-        [CliOption("food", Description = "Create new food")]
+        [CliOption("food", Description = "Remove food")]
         public void RemoveFood(string name)
         {
             if (string.IsNullOrEmpty(name))
@@ -27,6 +27,15 @@ namespace SisakFood.Cli
             Console.WriteLine($"{removed} foods removed");
             dao.InsertFoods(foods);
             Console.WriteLine("Foods saved");
+        }
+
+        [CliOption("meal", Description = "Remove meal")]
+        public void RemoveMeal(string name, DateTime date)
+        {
+            var dailyMeals = dao.GetDailyMeals(date);
+            int count = dailyMeals.Meals.RemoveAll(x => x.Food.Name == name);
+            Console.WriteLine($"{count} item removed");
+            dao.InsertDailyMeals(dailyMeals);
         }
     }
 }
