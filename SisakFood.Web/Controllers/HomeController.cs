@@ -22,9 +22,30 @@ namespace SisakFood.Web.Controllers
             this.dao = dao;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(DateTime? fromDate, DateTime? toDate)
         {
-            return View();
+            if (fromDate == null) fromDate = DateTime.Now.AddDays(-4);
+            if (toDate == null) toDate = DateTime.Now;
+
+            var model = new HomeModel();
+            foreach (var day in EachDay(fromDate.Value, toDate.Value))
+            {
+                var meal = dao.GetDailyMeals(day);
+                if (meal.Meals.Count > 0)
+                {
+                    model.DailyMeals.Add(meal);
+                }
+            }
+
+            model.FromDate = fromDate.Value;
+            model.ToDate = toDate.Value;
+            return View(model);
+        }
+
+        private IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
+        {
+            for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
+                yield return day;
         }
 
         public IActionResult Foods()
@@ -73,6 +94,30 @@ namespace SisakFood.Web.Controllers
             }
 
             return RedirectToAction(nameof(Foods));
+        }
+
+        public IActionResult MealEditor(Guid id)
+        {
+            var model = new MealModel();
+            model.FoodGuid = id;
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult MealEditor(MealModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Meal meal = new Meal();
+                meal.Food = dao.GetFood(model.FoodGuid);
+                meal.At = model.At;
+                meal.Quantity = model.Quantity;
+                var dailyMeals = dao.GetDailyMeals(meal.At);
+                dailyMeals.Meals.Add(meal);
+                dao.UpdateDailyMeals(dailyMeals);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Privacy()

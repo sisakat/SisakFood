@@ -1,8 +1,27 @@
-﻿@{
+﻿@model HomeModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<form method="get">
+    <div class="form-group">
+        <label for="fromDate">From</label>
+        <input class="form-control" type="date" id="fromDate" asp-for="FromDate" />
+    </div>
+    <div class="form-group">
+        <label for="toDate">From</label>
+        <input class="form-control" type="date" id="toDate" asp-for="ToDate" />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Refresh</button>
+</form>
+
+@foreach (var day in Model.DailyMeals)
+{
+    <h1>@day.Day (@day.CalculateKiloCalories() kcal)</h1>
+    @foreach (var meal in day.Meals)
+    {
+        <h2>@meal.Food.Name</h2>
+    }
+}

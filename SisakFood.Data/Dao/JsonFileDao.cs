@@ -52,7 +52,14 @@ namespace SisakFood.Data.Dao
         {
             string fileName = GetJsonFileName(from);
             if (File.Exists(fileName))
-                return ReadJson<DailyMeals>(fileName);
+            {
+                var dailyMeals = ReadJson<DailyMeals>(fileName);
+                foreach (var meal in dailyMeals.Meals)
+                {
+                    meal.Food = GetFood(meal.FoodGuid);
+                }
+                return dailyMeals;
+            }
             else
                 return new DailyMeals() { Day = from };
         }
@@ -65,12 +72,16 @@ namespace SisakFood.Data.Dao
 
         public void UpdateDailyMeals(DailyMeals dailyMeals)
         {
-            throw new NotImplementedException("Update not defined for JSON dao");
+            InsertDailyMeals(dailyMeals);
         }
 
         public void DeleteDailyMeals(DailyMeals dailyMeals)
         {
-            throw new NotImplementedException();
+            string fileName = GetJsonFileName(dailyMeals.Day);
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
         }
 
         public string GetFoodsFolder()

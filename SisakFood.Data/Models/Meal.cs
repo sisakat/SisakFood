@@ -1,14 +1,33 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace SisakFood.Data.Models
 {
     public class Meal
     {
-        public Food Food { get; set; }
+        private Food _food;
+
+        [JsonIgnore]
+        public Food Food
+        {
+            get
+            {
+                return _food;
+            }
+
+            set
+            {
+                _food = value;
+                FoodGuid = _food.Id;
+            }
+        }
+
+        public Guid FoodGuid { get; set; }
         public DateTime At { get; set; } = DateTime.Now;
         public int Quantity { get; set; }
 
-        public int CalculateKiloCalories() {
+        public int CalculateKiloCalories()
+        {
             return Food.Nutrients.CalculateKiloCalories() * Quantity / 100;
         }
 
