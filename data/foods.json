@@ -1,0 +1,22 @@
+[
+  {
+    "Id": "ddfb3dd3-aaf8-414f-b19f-5ba2b718deb2",
+    "Name": "Prutschka",
+    "Nutrients": {
+      "Carbohydrates": 2,
+      "Fat": 0,
+      "Protein": 0,
+      "Alcohol": 0
+    }
+  },
+  {
+    "Id": "cb095e7e-a1a6-4cde-b0cd-69618a0b243f",
+    "Name": "Test",
+    "Nutrients": {
+      "Carbohydrates": 0,
+      "Fat": 0,
+      "Protein": 3,
+      "Alcohol": 0
+    }
+  }
+]

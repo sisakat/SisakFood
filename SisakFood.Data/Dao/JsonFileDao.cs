@@ -22,25 +22,27 @@ namespace SisakFood.Data.Dao
             _dateTimeConverter = dt => dt.ToString("yyyy_MM_dd");
         }
 
-        public JsonFileDao(string mealFolder, DateTimeConverter converter) : this(mealFolder) 
+        public JsonFileDao(string mealFolder, DateTimeConverter converter) : this(mealFolder)
         {
             _dateTimeConverter = converter;
         }
 
-        private string GetJsonFileName(DateTime from) 
+        private string GetJsonFileName(DateTime from)
         {
             return Path.Combine(_mainFolder, $"{_dateTimeConverter(from)}{JSON_FILE_EXTENSION}");
         }
 
-        private T ReadJson<T>(string fileName) 
+        private T ReadJson<T>(string fileName)
         {
             string json = File.ReadAllText(fileName);
             return JsonSerializer.Deserialize<T>(json);
         }
 
-        private void WriteJson<T>(string fileName, T value) {
+        private void WriteJson<T>(string fileName, T value)
+        {
             if (File.Exists(fileName)) File.Delete(fileName);
-            string json = JsonSerializer.Serialize(value, new JsonSerializerOptions() {
+            string json = JsonSerializer.Serialize(value, new JsonSerializerOptions()
+            {
                 WriteIndented = true
             });
             File.WriteAllText(fileName, json);
@@ -85,7 +87,13 @@ namespace SisakFood.Data.Dao
                 return Enumerable.Empty<Food>();
         }
 
-        public Food GetFood(string name) 
+        public Food GetFood(Guid id)
+        {
+            var foods = GetFoods();
+            return foods.FirstOrDefault(x => x.Id == id);
+        }
+
+        public Food GetFood(string name)
         {
             var foods = GetFoods();
             return foods.FirstOrDefault(x => x.Name == name);
@@ -97,19 +105,47 @@ namespace SisakFood.Data.Dao
             WriteJson(fileName, foods);
         }
 
-        public void InsertFood(Food food)
+        public bool InsertFood(Food food)
         {
-            throw new NotImplementedException();
+            var foods = GetFoods().ToList();
+            if (foods.Any(x => x.Id == food.Id))
+            {
+                return UpdateFood(food);
+            }
+            else
+            {
+                food.Id = Guid.NewGuid();
+                foods.Add(food);
+                InsertFoods(foods);
+                return true;
+            }
         }
 
-        public void UpdateFood(Food food)
+        public bool UpdateFood(Food food)
         {
-            throw new NotImplementedException();
+            var foods = GetFoods().ToList();
+            var already = foods.SingleOrDefault(x => x.Id == food.Id);
+            if (already != null)
+            {
+                foods.Remove(already);
+                foods.Add(food);
+                InsertFoods(foods);
+                return true;
+            }
+            return false;
         }
 
-        public void DeleteFood(Food food)
+        public bool DeleteFood(Food food)
         {
-            throw new NotImplementedException();
+            var foods = GetFoods().ToList();
+            var already = foods.SingleOrDefault(x => x.Id == food.Id);
+            if (already != null)
+            {
+                foods.Remove(already);
+                InsertFoods(foods);
+                return true;
+            }
+            return false;
         }
     }
 }

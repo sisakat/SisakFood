@@ -1,0 +1,12 @@
+@using SisakFood.Data.Models;
+@model FoodsModel
+
+<a class="btn btn-primary" asp-action="FoodEditor">Create new</a>
+
+@foreach (var food in Model.Foods)
+{
+    <h1>@food.Name (@food.Nutrients.CalculateKiloCalories() kcal)</h1>
+    <a class="btn btn-secondary" onclick="return confirm('Are you sure?');" asp-action="FoodDelete"
+    asp-route-id="@food.Id">Delete</a>
+    <a class="btn btn-secondary" asp-action="FoodEditor" asp-route-id="@food.Id">Edit</a>
+}

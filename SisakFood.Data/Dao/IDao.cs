@@ -12,10 +12,11 @@ namespace SisakFood.Data.Dao
         void UpdateDailyMeals(DailyMeals dailyMeals);
         void DeleteDailyMeals(DailyMeals dailyMeals);
         IEnumerable<Food> GetFoods();
+        Food GetFood(Guid guid);
         Food GetFood(string name);
         void InsertFoods(IEnumerable<Food> foods);
-        void InsertFood(Food food);
-        void UpdateFood(Food food);
-        void DeleteFood(Food food);
+        bool InsertFood(Food food);
+        bool UpdateFood(Food food);
+        bool DeleteFood(Food food);
     }
 }

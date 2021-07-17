@@ -1,0 +1,26 @@
+@model SisakFood.Data.Models.Food;
+
+<form method="post">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input class="form-control" type="text" id="name" asp-for="Name" />
+    </div>
+    <div class="form-group">
+        <label for="protein">Protein</label>
+        <input class="form-control" type="number" id="protein" asp-for="Nutrients.Protein" />
+    </div>
+    <div class="form-group">
+        <label for="carbohydrates">Carbohydrates</label>
+        <input class="form-control" type="number" id="carbohydrates" asp-for="Nutrients.Carbohydrates" />
+    </div>
+    <div class="form-group">
+        <label for="fat">Fat</label>
+        <input class="form-control" type="number" id="fat" asp-for="Nutrients.Fat" />
+    </div>
+    <div class="form-group">
+        <label for="alcohol">Alcohol</label>
+        <input class="form-control" type="number" id="alcohol" asp-for="Nutrients.Alcohol" />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Save</button>
+</form>

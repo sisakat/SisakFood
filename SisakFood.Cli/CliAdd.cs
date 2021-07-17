@@ -19,7 +19,7 @@ namespace SisakFood.Cli
         public void AddMeal(string name, int quantity = 1, string date = null)
         {
             DateTime dateTime = DateTime.Now;
-            if (date != null && !DateTime.TryParse(date, out dateTime)) 
+            if (date != null && !DateTime.TryParse(date, out dateTime))
             {
                 Console.WriteLine("Specified date could not be parsed. Using the current day instead.");
                 dateTime = DateTime.Now;
