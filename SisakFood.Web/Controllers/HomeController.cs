@@ -108,10 +108,16 @@ namespace SisakFood.Web.Controllers
             return RedirectToAction(nameof(Foods));
         }
 
-        public IActionResult MealEditor(Guid id)
+        public IActionResult MealEditor(Guid id, int? qty)
         {
             var model = new MealModel();
+            var food = dao.GetFood(id);
             model.FoodGuid = id;
+            model.QuantitiesList = food.QuantitiesList;
+            if (qty.HasValue)
+            {
+                model.Quantity = qty.Value;
+            }
             return View(model);
         }
 
@@ -121,9 +127,11 @@ namespace SisakFood.Web.Controllers
             if (meal != null)
             {
                 var model = new MealModel();
+                var food = dao.GetFood(meal.FoodGuid);
                 model.FoodGuid = meal.FoodGuid;
                 model.At = meal.At;
                 model.Quantity = meal.Quantity;
+                model.QuantitiesList = food.QuantitiesList;
                 return View(nameof(MealEditor), model);
             }
 

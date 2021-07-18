@@ -1,6 +1,6 @@
 @model MealModel
 
-<form method="post">
+<form id="mealForm" method="post">
     @Html.HiddenFor(x => Model.FoodGuid)
     <div class="form-group">
         <label for="at">At</label>
@@ -10,6 +10,21 @@
         <label for="quantity">Quantity</label>
         <input class="form-control" type="number" min="1" max="100000" id="quantity" asp-for="Quantity" />
     </div>
+    <div class="form-group">
+        @foreach (var quantity in Model.QuantitiesList)
+        {
+            <a class="btn btn-outline-secondary" onclick="return setQuantity(@quantity);"
+            href="#">@quantity.ToString("N0")g</a>
+        }
+    </div>
 
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
+
+<script>
+    function setQuantity(qty) {
+        document.getElementById('quantity').value = qty;
+        document.getElementById('mealForm').submit();
+        return false;
+    }
+</script>

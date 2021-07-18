@@ -26,7 +26,9 @@
             {
                 <div class="row mb-1">
                     <div class="col-7 col-md-5">
-                        <a asp-action="MealEditor" asp-route-id="@meal.Food.Id">@(meal.Quantity)g @meal.Food.Name</a>
+                        <a asp-action="MealEditor" asp-route-id="@meal.Food.Id" asp-route-qty="@meal.Quantity">@(meal.Quantity)g
+                            @meal.Food.Name</a><br class="d-md-none" />
+                        <small class="text-muted">@(meal.CalculateKiloCalories())kcal</small>
                     </div>
                     <div class="d-none d-md-block col-md-1">
                         @(meal.Food.Nutrients.Protein.ToString("N0"))g

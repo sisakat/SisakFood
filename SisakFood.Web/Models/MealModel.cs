@@ -9,5 +9,7 @@ namespace SisakFood.Web.Models
         public Guid FoodGuid { get; set; }
         public DateTime At { get; set; } = DateTime.Now;
         public int Quantity { get; set; } = 100;
+        public IEnumerable<double> QuantitiesList { get; set; }
+            = new List<double>();
     }
 }
