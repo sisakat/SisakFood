@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -25,7 +26,7 @@ namespace SisakFood.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string mainFolder = "/home/stefan/Documents/Programming/SisakFood/data";
+            string mainFolder = Configuration["MainFolder"];
             services.AddScoped<IDao, JsonFileDao>(settings =>
             {
                 var dao = new JsonFileDao(mainFolder);
@@ -37,6 +38,10 @@ namespace SisakFood.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var cultureInfo = new CultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
