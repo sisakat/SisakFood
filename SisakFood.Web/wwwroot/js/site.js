@@ -7,7 +7,7 @@ $(document).ready(function() {
     var charts = $('[id^="calorieChart-"]').each(function() {
         let date = $(this).attr('id').replace("calorieChart-", "");
         let ctx = $(this);
-        $.getJSON("/calorieDistribution?at=" + date, function(data) {
+        $.getJSON("calorieDistribution?at=" + date, function(data) {
             loadCalorieChart(ctx, data);
         });
     });

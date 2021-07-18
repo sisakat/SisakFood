@@ -24,7 +24,7 @@
         <h1>@key</h1>
     </div>
     <div class="card-body">
-        @foreach (var food in Model.FoodDict[key])
+        @foreach (var food in Model.FoodDict[key].OrderBy(x => x.Name))
             {
                 <div class="row">
                     <div class="col-sm-8">
