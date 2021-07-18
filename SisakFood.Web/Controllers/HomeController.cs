@@ -179,6 +179,22 @@ namespace SisakFood.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet("calorieDistribution")]
+        public ActionResult<List<int>> GetNutrients(DateTime at)
+        {
+            var dailyMeals = dao.GetDailyMeals(at);
+            if (dailyMeals.Meals.Count > 0)
+            {
+                var calories = (int)dailyMeals.CalculateKiloCalories();
+                var protein = dailyMeals.CalculateProtein() * KiloCalories.PROTEIN / calories * 100;
+                var carbohydrates = dailyMeals.CalculateCarbohydrates() * KiloCalories.CARBOHYDRATES / calories * 100;
+                var fat = dailyMeals.CalculateFat() * KiloCalories.FAT / calories * 100;
+                return new List<int>() { (int)protein, (int)carbohydrates, (int)fat };
+            }
+
+            return NotFound();
+        }
+
         public IActionResult Privacy()
         {
             return View();
