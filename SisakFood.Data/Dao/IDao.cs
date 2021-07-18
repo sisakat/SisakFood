@@ -11,6 +11,7 @@ namespace SisakFood.Data.Dao
         void InsertDailyMeals(DailyMeals dailyMeals);
         void UpdateDailyMeals(DailyMeals dailyMeals);
         void DeleteDailyMeals(DailyMeals dailyMeals);
+        Meal GetMealFromDailyMeals(DateTime at);
         IEnumerable<Food> GetFoods();
         Food GetFood(Guid guid);
         Food GetFood(string name);

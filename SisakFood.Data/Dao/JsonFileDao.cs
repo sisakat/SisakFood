@@ -84,6 +84,13 @@ namespace SisakFood.Data.Dao
             }
         }
 
+        public Meal GetMealFromDailyMeals(DateTime at)
+        {
+            var dailyMeals = GetDailyMeals(at);
+            var meal = dailyMeals.Meals.FirstOrDefault(x => x.At.TrimMilliseconds() == at.TrimMilliseconds());
+            return meal;
+        }
+
         public string GetFoodsFolder()
         {
             return Path.Combine(_mainFolder, $"{FOODS_FILE_NAME}{JSON_FILE_EXTENSION}");

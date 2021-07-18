@@ -1,13 +1,45 @@
 @using SisakFood.Data.Models;
 @model FoodsModel
 
-<a class="btn btn-primary" asp-action="FoodEditor">Create new</a>
+<div class="container">
+    <div class="row mb-2">
+        <div class="col">
+            <a class="btn btn-secondary" asp-action="FoodEditor"><i class="fa fa-plus"></i> Create new</a>
+        </div>
+    </div>
 
-@foreach (var food in Model.Foods)
-{
-    <h1>@food.Name (@food.Nutrients.CalculateKiloCalories() kcal)</h1>
-    <a class="btn btn-secondary" onclick="return confirm('Are you sure?');" asp-action="FoodDelete"
-    asp-route-id="@food.Id">Delete</a>
-    <a class="btn btn-secondary" asp-action="FoodEditor" asp-route-id="@food.Id">Edit</a>
-    <a class="btn btn-secondary" asp-action="MealEditor" asp-route-id="@food.Id">Add</a>
-}
+
+    @foreach (var key in Model.FoodDict.Keys)
+    {
+        <div class="card mb-2">
+            <div class="card-header">
+                <h1>@key</h1>
+            </div>
+            <div class="card-body">
+                @foreach (var food in Model.FoodDict[key])
+                {
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h4>@food.Name <span class="text-muted">@food.Nutrients.CalculateKiloCalories().ToString("N0")
+                                    kcal</span></h4>
+                            <ul class="list-unstyled">
+                                <li class="d-inline">Protein @(food.Nutrients.Protein.ToString("N0"))g</li>
+                                <li class="d-inline">Carbohydrate @(food.Nutrients.Carbohydrates.ToString("N0"))g</li>
+                                <li class="d-inline">Fat @(food.Nutrients.Fat.ToString("N0"))g</li>
+                                <li class="d-inline">Alcohol @(food.Nutrients.Alcohol.ToString("N0"))g</li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-4">
+                            <a class="btn btn-primary float-right ml-2" asp-action="MealEditor" asp-route-id="@food.Id"><i
+                            class="fa fa-plus"></i></a>
+                            <a class="btn btn-secondary float-right ml-2" asp-action="FoodEditor" asp-route-id="@food.Id"><i
+                            class="fa fa-edit"></i></a>
+                            <a class="btn btn-danger float-right" onclick="return confirm('Are you sure?');"
+                        asp-action="FoodDelete" asp-route-id="@food.Id"><i class="fa fa-times"></i></a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

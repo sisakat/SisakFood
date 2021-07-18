@@ -23,17 +23,41 @@ namespace SisakFood.Data.Models
         }
 
         public Guid FoodGuid { get; set; }
-        public DateTime At { get; set; } = DateTime.Now;
+        private DateTime _at = DateTime.Now.TrimMilliseconds();
+        public DateTime At
+        {
+            get => _at;
+            set
+            {
+                _at = value.TrimMilliseconds();
+            }
+        }
+
         public int Quantity { get; set; }
 
-        public int CalculateKiloCalories()
+        public double CalculateKiloCalories()
         {
             return Food.Nutrients.CalculateKiloCalories() * Quantity / 100;
         }
 
-        public int CalculateCarbohydrates() => Food.Nutrients.Carbohydrates * Quantity / 100;
-        public int CalculateFat() => Food.Nutrients.Fat * Quantity / 100;
-        public int CalculateProtein() => Food.Nutrients.Protein * Quantity / 100;
-        public int CalculateAlcohol() => Food.Nutrients.Alcohol * Quantity / 100;
+        public double CalculateCarbohydrates() => Food.Nutrients.Carbohydrates * Quantity / 100;
+        public double CalculateFat() => Food.Nutrients.Fat * Quantity / 100;
+        public double CalculateProtein() => Food.Nutrients.Protein * Quantity / 100;
+        public double CalculateAlcohol() => Food.Nutrients.Alcohol * Quantity / 100;
+
+        public override bool Equals(object other)
+        {
+            var o = other as Meal;
+            if (o != null)
+            {
+                return o.At.TrimMilliseconds() == this.At.TrimMilliseconds();
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.At.GetHashCode();
+        }
     }
 }

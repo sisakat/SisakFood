@@ -52,6 +52,18 @@ namespace SisakFood.Web.Controllers
         {
             var model = new FoodsModel();
             model.Foods = dao.GetFoods().ToList();
+
+            for (char i = 'A'; i != 'Z'; i++)
+            {
+                model.FoodDict.Add(i, new List<Food>());
+                foreach (var food in model.Foods.Where(x => x.Name.StartsWith(i)))
+                {
+                    model.FoodDict[i].Add(food);
+                }
+                if (model.FoodDict[i].Count == 0)
+                    model.FoodDict.Remove(i);
+            }
+
             return View(model);
         }
 
@@ -103,6 +115,27 @@ namespace SisakFood.Web.Controllers
             return View(model);
         }
 
+        public IActionResult MealEditorAt(DateTime at)
+        {
+            var meal = dao.GetMealFromDailyMeals(at);
+            if (meal != null)
+            {
+                var model = new MealModel();
+                model.FoodGuid = meal.FoodGuid;
+                model.At = meal.At;
+                model.Quantity = meal.Quantity;
+                return View(nameof(MealEditor), model);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public IActionResult MealEditorAt(MealModel model)
+        {
+            return MealEditor(model);
+        }
+
         [HttpPost]
         public IActionResult MealEditor(MealModel model)
         {
@@ -113,10 +146,28 @@ namespace SisakFood.Web.Controllers
                 meal.At = model.At;
                 meal.Quantity = model.Quantity;
                 var dailyMeals = dao.GetDailyMeals(meal.At);
+                var mealFromDailyMeals = dao.GetMealFromDailyMeals(meal.At);
+                if (mealFromDailyMeals != null)
+                {
+                    dailyMeals.Meals.Remove(mealFromDailyMeals);
+                }
                 dailyMeals.Meals.Add(meal);
                 dao.UpdateDailyMeals(dailyMeals);
             }
 
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult MealDelete(DateTime at)
+        {
+            var dailyMeals = dao.GetDailyMeals(at);
+            var mealFromDailyMeals = dao.GetMealFromDailyMeals(at);
+            if (mealFromDailyMeals != null)
+            {
+                dailyMeals.Meals.Remove(mealFromDailyMeals);
+            }
+            dao.UpdateDailyMeals(dailyMeals);
             return RedirectToAction(nameof(Index));
         }
 

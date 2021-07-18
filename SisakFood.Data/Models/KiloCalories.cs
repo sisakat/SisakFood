@@ -7,7 +7,7 @@ namespace SisakFood.Data.Models
         public const int PROTEIN = 4;
         public const int ALCOHOL = 7;
 
-        public static int CalculateKiloCalories(this Nutrition nutrition)
+        public static double CalculateKiloCalories(this Nutrition nutrition)
         {
             return nutrition.Carbohydrates * CARBOHYDRATES +
                 nutrition.Fat * FAT +
