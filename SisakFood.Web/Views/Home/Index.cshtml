@@ -72,3 +72,25 @@
         </div>
     </div>
 }
+
+<div class="card">
+    <div class="card-header">
+        <h3>Calorie summary</h3>
+    </div>
+    <div class="card-body">
+        <form class="mb-2 form-inline">
+            <div class="form-group mb-2">
+                <input class="form-control" type="date" id="calorieSummaryFromDate" asp-for="FromDate" />
+            </div>
+            <div class="form-group mb-2 ml-1">
+                <input class="form-control" type="date" id="calorieSummaryToDate" asp-for="ToDate" />
+            </div>
+
+            <button class="btn btn-primary mb-2 ml-1" onclick="calorieSummary(); return false;">Load</button>
+        </form>
+
+        <div class="container mb-2" style="height: 300px">
+            <canvas id="calorieSummary" width="1" height="1"></canvas>
+        </div>
+    </div>
+</div>

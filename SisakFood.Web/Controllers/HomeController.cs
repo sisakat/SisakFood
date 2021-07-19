@@ -108,6 +108,8 @@ namespace SisakFood.Web.Controllers
             return RedirectToAction(nameof(Foods));
         }
 
+        [HttpGet]
+        [Route("Home/MealEditor/{id:Guid}")]
         public IActionResult MealEditor(Guid id, int? qty)
         {
             var model = new MealModel();
@@ -193,6 +195,34 @@ namespace SisakFood.Web.Controllers
             }
 
             return NotFound();
+        }
+
+        public class CalorieSummary
+        {
+            public DateTime Day { get; set; }
+            public int Calories { get; set; }
+        }
+
+        [HttpGet("calorieSummary")]
+        public ActionResult<List<CalorieSummary>> GetCalorieSummary(DateTime from, DateTime to)
+        {
+            List<DailyMeals> meals = new List<DailyMeals>();
+            foreach (var day in EachDay(from, to))
+            {
+                meals.Add(dao.GetDailyMeals(day));
+            }
+
+            List<CalorieSummary> summary = new List<CalorieSummary>();
+            foreach (var meal in meals)
+            {
+                summary.Add(new CalorieSummary
+                {
+                    Day = meal.Day,
+                    Calories = (int)meal.CalculateKiloCalories()
+                });
+            }
+
+            return summary;
         }
 
         public IActionResult Privacy()

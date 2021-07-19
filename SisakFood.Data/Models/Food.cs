@@ -17,7 +17,7 @@ namespace SisakFood.Data.Models
 
             get
             {
-                if (Quantities == null)
+                if (string.IsNullOrEmpty(Quantities))
                     return Enumerable.Empty<double>();
                 return Quantities.Split(',')
                     .ToList()
