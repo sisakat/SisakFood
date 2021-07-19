@@ -44,6 +44,7 @@ namespace SisakFood.Data.Models
         public double CalculateFat() => Food.Nutrients.Fat * Quantity / 100;
         public double CalculateProtein() => Food.Nutrients.Protein * Quantity / 100;
         public double CalculateAlcohol() => Food.Nutrients.Alcohol * Quantity / 100;
+        public double CalculatePrice() => Food.Price * Quantity / 100;
 
         public override bool Equals(object other)
         {

@@ -31,5 +31,6 @@ namespace SisakFood.Data.Models
         }
 
         public string Quantities { get; set; }
+        public double Price { get; set; }
     }
 }

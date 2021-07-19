@@ -14,5 +14,6 @@ namespace SisakFood.Data.Models
         public double CalculateFat() => Meals.Sum(x => x.CalculateFat());
         public double CalculateProtein() => Meals.Sum(x => x.CalculateProtein());
         public double CalculateAlcohol() => Meals.Sum(x => x.CalculateAlcohol());
+        public double CalculatePrice() => Meals.Sum(x => x.CalculatePrice());
     }
 }
